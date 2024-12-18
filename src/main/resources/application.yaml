@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: kafka
+  avro:
+    use-custom-coders: true
+  kafka:
+    bootstrap-servers: localhost:9092 # Change to your Kafka server
+    properties:
+#      schema.registry.url: mock://
+#      specific.avro.reader: true
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*" # Trust all packages (or specify your package name)
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*" # Trust all packages (or specify your package name)

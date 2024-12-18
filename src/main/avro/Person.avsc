@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "Person",
+  "namespace": "com.jshingler.kafka",
+  "fields": [
+    {
+      "name": "firstName",
+      "type": "string"
+    },
+    {
+      "name": "lastName",
+      "type": "string"
+    },
+    {
+      "name": "address",
+      "type": {
+        "type": "string",
+        "logicalType": "validated-string",
+        "pattern": "^[0-9]{4}-[0-9]{2}$"
+      }
+    }
+  ]
+}
