@@ -5,18 +5,29 @@ spring:
     use-custom-coders: true
   kafka:
     bootstrap-servers: localhost:9092 # Change to your Kafka server
+
     properties:
 #      schema.registry.url: mock://
 #      specific.avro.reader: true
     consumer:
       group-id: my-group
       auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#      key-deserializer: com.jshingler.kafka.CustomErrorHandlingDeserializer
+#      value-deserializer: com.jshingler.kafka.CustomErrorHandlingDeserializer
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
       properties:
         spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: io.confluent.kafka.serializers.KafkaAvroDeserializer
           json:
             trusted:
               packages: "*" # Trust all packages (or specify your package name)
